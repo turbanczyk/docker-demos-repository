@@ -1,0 +1,36 @@
+version: '2.4'
+services:
+  api-builder:
+    image: api-builder
+    build: api
+    volumes:
+      - volume-1:/usr/src/my-app/volume-1
+  client-builder:
+    image: client-builder
+    build: client
+    volumes:
+      - volume-1:/usr/src/my-app/volume-1
+  server-instance:
+    image: server-instance
+    build: server-instance
+    networks:
+      - test-client-server-net
+    ports:
+      - 8080:8080
+    volumes:
+      - volume-1:/usr/src/my-app/volume-1
+  client-instance:
+    image: client-instance
+    build: client-instance
+    networks:
+      - test-client-server-net
+    volumes:
+      - volume-1:/usr/src/my-app/volume-1
+    depends_on:
+      - server-instance
+
+volumes:
+  volume-1:
+
+networks:
+  test-client-server-net:
